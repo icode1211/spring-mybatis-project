@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springmybatis.repository.StudentMapper">
+
+    <select id="countOfStudents" resultType="int">
+        select count(*)
+        from students
+    </select>
+
+    <select id="findStudentsByName" resultType="Student">
+        select name, age, address
+        from students
+        where name = #{name}
+    </select>
+
+    <select id="findAllBy" resultType="Student">
+        select name, age, address
+        from students
+        <where>
+            <if test="name != null and name != ''">
+                and name like concat('%', #{name}, '%')
+            </if>
+            <if test="upperAge != null">
+                and age &lt;= #{upperAge}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="id">
+        insert into students (name, age, address)
+        values (#{name}, #{age}, #{address})
+    </insert>
+
+    <update id="updateStudent">
+        update students
+        set name=#{updateParam.name},
+            age=#{updateParam.age},
+            address=#{updateParam.address}
+        where id = #{id}
+    </update>
+
+</mapper>
